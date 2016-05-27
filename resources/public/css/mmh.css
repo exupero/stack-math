@@ -1,0 +1,83 @@
+html, body {
+  font-family: 'PT Sans', Arial, sans-serif;
+  font-size: 14pt;
+}
+
+main {
+  max-width: 960px;
+  margin: 0.5rem auto;
+}
+
+input, textarea {
+  font-size: 14pt;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  line-height: 1.5;
+  border: 1px solid hsl(0, 0%, 80%);
+}
+
+button {
+  background-color: hsl(0, 0%, 90%);
+  border-radius: 3px;
+  border-width: 0;
+  cursor: pointer;
+  font-size: 14pt;
+  padding: 0.5rem 0.7rem;
+}
+
+td {
+  vertical-align: top;
+}
+
+.l-columns {
+  display: flex;
+  flex-direction: row;
+}
+
+.l-columns > * {
+  flex-grow: 1;
+  padding: 1rem;
+}
+
+.l-diptych {
+  display: flex;
+  flex-direction: row;
+}
+
+.l-diptych > * {
+  padding: 1rem;
+  width: 50%;
+}
+
+.l-width-full {
+  width: 100%;
+}
+
+.l-width-half {
+  width: 50%;
+}
+
+.l-vspaced > * + * {
+  margin-top: 2rem;
+}
+
+.l-horizontal {
+  display: flex;
+  flex-direction: row;
+}
+
+.l-horizontal > * {
+  flex-grow: 1;
+}
+
+.t-muted {
+  color: gray;
+}
+
+.t-right {
+  text-align: right;
+}
+
+.t-error {
+  color: red;
+}
