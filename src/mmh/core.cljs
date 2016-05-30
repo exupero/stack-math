@@ -1,15 +1,28 @@
 (ns mmh.core
   (:require-macros [mmh.macros :refer [spy]])
-  (:require [vdom.core :refer [renderer]]
+  (:require [goog.crypt.base64 :as b64]
+            [cljs.reader :as reader]
+            [clojure.string :as string]
+            [vdom.core :refer [renderer]]
             [mmh.ui :as ui]))
 
 (enable-console-print!)
 
+(def parsed-hash
+  (try
+    (-> js/window .-location .-hash
+      (string/replace #"^#/" "")
+      b64/decodeString
+      reader/read-string)
+    (catch js/Exception e
+      nil)))
+
 (defonce model
   (atom
-    {:javascript ""
-     :algorithm ""
-     :initial ""}))
+    (or parsed-hash
+        {:javascript ""
+         :algorithm ""
+         :initial ""})))
 
 (defmulti emit (fn [t & _] t))
 
@@ -23,10 +36,16 @@
   (let [r (renderer (.getElementById js/document "app"))]
     #(r (ui/main emit @model))))
 
-(defonce on-update
+(defonce watch-for-rerender
   (add-watch model :rerender
     (fn [_ _ _ model]
       (render! model))))
+
+(defonce watch-for-persist
+  (add-watch model :persist
+    (fn [_ _ _ model]
+      (set! (-> js/window .-location .-hash)
+        (str "/" (b64/encodeString (pr-str model)))))))
 
 (render! @model)
 
