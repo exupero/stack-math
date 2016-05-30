@@ -9,6 +9,7 @@ main {
 }
 
 input, textarea {
+  font-family: 'PT Sans', Arial, sans-serif;
   font-size: 14pt;
   padding: 0.5rem;
   box-sizing: border-box;

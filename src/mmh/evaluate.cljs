@@ -17,7 +17,6 @@
    '- (top 2 -)
    '* (top 2 *)
    (symbol \/) (top 2 /)
-   (symbol \^) (top 2 #(js/Math.pow %1 %2))
    '% (top 2 mod)
    'divmod (top-mult 2 (fn [x n]
                          [(js/Math.floor (/ x n))
@@ -76,7 +75,12 @@
         (recur left right (conj acc [left right])))
       acc)))
 
-(defn final [left right])
+(defn js->fn [expr]
+  (js/eval (str "(function(x){return " expr ";})")))
+
+(defn stack->fn [stack]
+  (fn [& args]
+    (-> (steps (vec args) stack) last first last)))
 
 (comment
   (reductions step [5]
