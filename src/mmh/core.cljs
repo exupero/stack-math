@@ -1,6 +1,7 @@
 (ns mmh.core
   (:require-macros [mmh.macros :refer [spy]])
-  (:require [goog.crypt.base64 :as b64]
+  (:require [goog.crypt :as crypt]
+            [goog.crypt.base64 :as b64]
             [cljs.reader :as reader]
             [clojure.string :as string]
             [vdom.core :refer [renderer]]
@@ -10,11 +11,14 @@
 
 (def parsed-hash
   (try
-    (-> js/window .-location .-hash
-      (string/replace #"^#/" "")
-      b64/decodeString
-      reader/read-string)
-    (catch js/Exception e
+    (as-> js/window x
+      (.-location x)
+      (.-hash x)
+      (string/replace x #"^#/" "")
+      (b64/decodeStringToByteArray x true)
+      (crypt/utf8ByteArrayToString x)
+      (reader/read-string x))
+    (catch js/Error e
       nil)))
 
 (defonce model
@@ -45,7 +49,11 @@
   (add-watch model :persist
     (fn [_ _ _ model]
       (set! (-> js/window .-location .-hash)
-        (str "/" (b64/encodeString (pr-str model)))))))
+        (as-> model x
+          (pr-str x)
+          (crypt/stringToUtf8ByteArray x)
+          (b64/encodeByteArray x true)
+          (str "/" x))))))
 
 (render! @model)
 
