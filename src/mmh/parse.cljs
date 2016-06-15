@@ -3,14 +3,15 @@
 
 (defn tokens [s]
   (->> s
-    (re-seq #"\[|\]|[0-9]+|[^ \[\]]+")
+    (re-seq #"\[|\]|-?[0-9]+\.[0-9]+|[0-9]+|[^ \[\]]+")
     (map (fn [t]
            {:value t
             :type
             (condp re-matches t
               #"\[" :lacket
               #"\]" :racket
-              #"[0-9]+" :number
+              #"-?[0-9]+\.[0-9]+" :number
+              #"-?[0-9]+" :number
               :word)}))))
 
 (defn realize [t]
