@@ -18,6 +18,7 @@
    '* (top 2 *)
    (symbol \/) (top 2 /)
    '% (top 2 mod)
+   (symbol \^) (top 2 js/Math.pow)
    'divmod (top-mult 2 (fn [x n]
                          [(js/Math.floor (/ x n))
                           (mod x n)]))
